@@ -4,10 +4,24 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from Themis.models import Project
-from Themis.models import Employee
+from Themis.models.employee import Employee
+from Themis.models.project import Project
 from Themis.serializers import EmployeeSerializer, LoginSerializer, EmployeeBasicInfoSerializer, \
-    ProjectSerializer
+    ProjectSerializer, ProjectDetailSerializer
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+
+class ProjectDetailView(APIView):
+
+    def get(self, request, project_id):
+        print(project_id)
+        project = Project.objects.get(pk=project_id)
+        serializer = ProjectDetailSerializer(project)
+        return Response(serializer.data)
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
